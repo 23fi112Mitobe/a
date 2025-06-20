@@ -37,16 +37,19 @@
     <div class="chat">
       <ul class="messages"></ul>
       <form class="form">
-        <input class="input" autocomplete="off" />
+        <input class="input" placeholder="Enterキーで送信" autocomplete="off" />
         <button class="submit">Send</button>
       </form>
     </div>
+
+    <!-- キャンバスとクリアボタン -->
     <canvas
       id="canvas"
       width="600"
       height="600"
       style="border: solid 1px black"
     ></canvas>
+    <button onclick="clearCanvas()">🧹 全消し</button>
 
     <script>
       function main() {
@@ -127,16 +130,16 @@
             const messageList = document.querySelector('.messages')
             const li = document.createElement('li')
             if (id === myId) {
-              li.textContent = `(${id})自分:` + text
+              li.innerHTML = `<strong style="color: green">(${id})自分:</strong> ${text}`
             } else {
               li.textContent = id + ': ' + text
             }
             messageList.appendChild(li)
+            messageList.scrollTop = messageList.scrollHeight
           }
         }
 
         const form = document.querySelector('.form')
-
         form.onsubmit = function (e) {
           e.preventDefault()
           const input = document.querySelector('.input')
@@ -149,6 +152,13 @@
         ws.onerror = function (error) {
           console.error('WebSocket Error: ', error)
         }
+      }
+
+      // 🧹 キャンバス全消し関数
+      function clearCanvas() {
+        const canvas = document.getElementById('canvas')
+        const ctx = canvas.getContext('2d')
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
       }
 
       main()
